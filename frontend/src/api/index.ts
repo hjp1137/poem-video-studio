@@ -277,3 +277,13 @@ export function updateTaskParams(
     body: JSON.stringify(payload),
   })
 }
+
+/** 首尾帧 FL2VA 直连 API：独立试验，原有批量 ComfyUI 工作流不受影响。 */
+export async function generateKeyframeVideo(form: FormData): Promise<Blob> {
+  const resp = await fetch('/api/h3/keyframes/generate', { method: 'POST', body: form })
+  if (!resp.ok) {
+    const data = await resp.json().catch(() => null) as { detail?: string } | null
+    throw new ApiError(data?.detail || '首尾帧生成失败 (HTTP ' + resp.status + ')', resp.status, data)
+  }
+  return resp.blob()
+}
