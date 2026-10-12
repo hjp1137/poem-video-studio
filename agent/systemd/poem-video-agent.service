@@ -1,0 +1,22 @@
+# poem-video-agent:宿主机受控运维 Agent
+# 安装:sudo cp agent/systemd/poem-video-agent.service /etc/systemd/system/
+#      sudo systemctl daemon-reload && sudo systemctl enable --now poem-video-agent
+[Unit]
+Description=PoemVideo Studio host agent (allowlist GPU/service control)
+After=network.target
+
+[Service]
+Type=simple
+User=poemagent
+Group=poemagent
+WorkingDirectory=/opt/poem-video-agent
+Environment=AGENT_HOST=127.0.0.1
+Environment=AGENT_PORT=8300
+# 如启用 Token:EnvironmentFile=-/etc/poem-video-agent/agent.env(内含 AGENT_TOKEN)
+EnvironmentFile=-/etc/poem-video-agent/agent.env
+ExecStart=/opt/poem-video-agent/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8300
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

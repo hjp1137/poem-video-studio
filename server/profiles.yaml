@@ -1,0 +1,16 @@
+# 一键「准备 MiniMax H3 视频环境」Profile(PoemVideo Studio API 使用)
+# 实际是否停止 Ollama、功耗档位以服务器真实 GPU 分配策略为准,不在代码中写死。
+profiles:
+  h3_video:
+    display_name: MiniMax H3 视频生成
+    gpu_power:
+      enabled: true
+      watts: 280
+    stop_services:
+      - ollama
+    start_services:
+      - minimax_h3
+      - comfyui
+    readiness:
+      minimax_h3_timeout_seconds: 300
+      comfyui_timeout_seconds: 120

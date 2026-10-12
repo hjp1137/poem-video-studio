@@ -1,0 +1,37 @@
+services:
+  poem-video-api:
+    build:
+      context: ./backend
+      dockerfile: ../docker/Dockerfile.api
+    container_name: poem-video-api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Docker 内固定数据根(命名卷);数据库路径由 DATA_ROOT 推导
+      DATA_ROOT: /data/poem-video-studio
+    volumes:
+      - poem-data:/data/poem-video-studio
+      # Workflow 模板(旧只读示例;模板管理写入 DATA_ROOT/workflows)
+      - ./workflows:/app/workflows:ro
+      # 服务器控制中心:一键环境 Profile(任务04/05)
+      - ./server:/app/server:ro
+      # ComfyUI 用户工作流(模板管理页导入来源)
+      - /data/AI_Models/ComfyUI-H3/user:/comfyui-user:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${API_PORT:-8000}:8000"
+
+  poem-video-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
+    container_name: poem-video-web
+    restart: unless-stopped
+    depends_on:
+      - poem-video-api
+    ports:
+      - "${WEB_PORT:-8080}:80"
+
+volumes:
+  poem-data:

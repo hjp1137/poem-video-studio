@@ -1,0 +1,16 @@
+# poem-video-agent 最小权限 sudoers
+# 安装:sudo cp agent/sudoers/poem-video-agent /etc/sudoers.d/poem-video-agent && sudo chmod 440 /etc/sudoers.d/poem-video-agent
+# 用户名 poemagent 需与 poem-video-agent.service 的 User 一致,按实际修改。
+#
+# 权限设计说明(为什么是这些):
+# 1. /usr/bin/nvidia-smi:GPU 状态查询与 Power Limit 设置(-pl)同一二进制,
+#    sudoers 无法只放行 "-pl" 子参数;设计文档 V1.1 §15.2 明确采用该放行方式,
+#    风险面限定在 nvidia-smi 工具自身能力(不含任意 shell)。
+# 2. systemctl/journalctl:只放行已注册 unit 的固定动词,unit 名逐个枚举,
+#    新增受管服务必须同步修改本文件(防止 Web 侧任意扩权)。
+# 3. 不包含 ALL=(ALL) NOPASSWD: ALL,不包含 /bin/sh、kill、docker。
+poemagent ALL=(root) NOPASSWD: /usr/bin/nvidia-smi
+poemagent ALL=(root) NOPASSWD: /usr/bin/systemctl start minimax-h3.service, /usr/bin/systemctl stop minimax-h3.service, /usr/bin/systemctl restart minimax-h3.service
+poemagent ALL=(root) NOPASSWD: /usr/bin/systemctl start comfyui.service, /usr/bin/systemctl stop comfyui.service, /usr/bin/systemctl restart comfyui.service
+poemagent ALL=(root) NOPASSWD: /usr/bin/systemctl start ollama.service, /usr/bin/systemctl stop ollama.service, /usr/bin/systemctl restart ollama.service
+poemagent ALL=(root) NOPASSWD: /usr/bin/journalctl -u minimax-h3.service *, /usr/bin/journalctl -u comfyui.service *, /usr/bin/journalctl -u ollama.service *

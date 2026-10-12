@@ -1,0 +1,42 @@
+# Workflow 节点映射(示例)
+#
+# !!! 重要 !!!
+# 本文件为结构示例。生产使用前,必须从当前服务器正在成功生成视频的 ComfyUI
+# MiniMax H3 工作流导出 API Format JSON(workflows/minimax_h3_poem_v1.json),
+# 并以下方的字段结构逐一校准真实节点 ID 与 input key。
+# 禁止根据截图、旧节点 ID 或推测直接硬编码。
+#
+# 使用方法:复制本文件为 workflows/workflow-map.yaml 后按真实 Workflow 修改。
+name: minimax_h3_poem_v1
+
+nodes:
+  image:
+    id: "12"
+    input: "image"
+  prompt:
+    id: "35"
+    input: "prompt"
+  negative_prompt:
+    id: "36"
+    input: "negative_prompt"
+  speech:
+    id: "41"
+    input: "text"
+  width:
+    id: "45"
+    input: "width"
+  height:
+    id: "45"
+    input: "height"
+  fps:
+    id: "45"
+    input: "fps"
+  num_frames:
+    id: "45"
+    input: "num_frames"
+  seed:
+    id: "45"
+    input: "seed"
+  save:
+    id: "50"
+    input: "filename_prefix"

@@ -1,0 +1,25 @@
+# comfyui.service 示例模板(必须先用「迁移前核查清单」采集真实启动命令后填充)
+# ⚠️ 禁止按历史记忆填写 ExecStart:以下路径/参数均为占位,需在服务器核实。
+[Unit]
+Description=ComfyUI workflow service
+After=network.target
+
+[Service]
+Type=exec
+# TODO(服务器核实):实际运行用户
+User=gpuuser
+# TODO(服务器核实):ComfyUI 根目录(保持现有 custom_nodes 与模型路径)
+WorkingDirectory=/home/gpuuser/ComfyUI
+# TODO(服务器核实):固定 Python 绝对路径 + 当前成功启动参数原样迁移
+# ExecStart=<venv>/bin/python main.py --listen 0.0.0.0 --port 8188
+EnvironmentFile=-/etc/poem-video-agent/comfyui.env
+# 停止后进程不能残留继续占 GPU/端口:SIGTERM + 兜底超时
+TimeoutStartSec=300
+TimeoutStopSec=60
+KillSignal=SIGTERM
+Restart=on-failure
+RestartSec=5
+
+[Install]
+# 是否开机自启由用户决定
+# WantedBy=multi-user.target

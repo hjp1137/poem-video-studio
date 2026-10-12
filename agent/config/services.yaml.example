@@ -1,0 +1,36 @@
+# 服务注册表(部署到 /etc/poem-video-agent/services.yaml)
+# 只允许控制此处登记的服务;Web 页面不能动态新增 systemd unit。
+# health.url 的端口以服务器真实部署为准(H3 端口必须现场核实后填写)。
+services:
+  minimax_h3:
+    display_name: MiniMax H3
+    manager: systemd
+    unit: minimax-h3.service
+    health:
+      type: http
+      # TODO(服务器核实):替换为真实 vLLM OpenAI 兼容端口
+      url: http://127.0.0.1:8001/v1/models
+      timeout: 3
+    gpu_profile: h3
+    description: MiniMax H3 视频生成模型服务
+
+  comfyui:
+    display_name: ComfyUI
+    manager: systemd
+    unit: comfyui.service
+    health:
+      type: http
+      url: http://127.0.0.1:8188/system_stats
+      timeout: 3
+    gpu_profile: comfyui
+    description: ComfyUI 工作流执行服务
+
+  ollama:
+    display_name: Ollama
+    manager: systemd
+    unit: ollama.service
+    health:
+      type: http
+      url: http://127.0.0.1:11434/api/tags
+      timeout: 3
+    description: Ollama 本地模型(冲突时按 Profile 停止)

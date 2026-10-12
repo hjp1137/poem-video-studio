@@ -1,0 +1,20 @@
+# 开机自动应用 GPU Power Limit(oneshot)
+# 安装:sudo cp agent/systemd/poem-video-gpu-power.service /etc/systemd/system/
+# 配置:/etc/poem-video-agent/gpu-power.json {"enabled":true,"default_power_limit":280,"per_gpu":{}}
+[Unit]
+Description=PoemVideo Studio apply GPU power limit on boot
+# 在 NVIDIA 驱动常驻服务就绪后执行;nvidia-persistenced 不存在时由 network-online 兜底
+After=nvidia-persistenced.service multi-user.target
+Wants=nvidia-persistenced.service
+
+[Service]
+Type=oneshot
+User=poemagent
+Group=poemagent
+WorkingDirectory=/opt/poem-video-agent
+# 单卡失败以非 0 退出并记录 journald,但不阻断系统启动(unit 非必需)
+ExecStart=/opt/poem-video-agent/.venv/bin/python -m app.apply_power
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target

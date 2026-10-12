@@ -1,0 +1,33 @@
+# minimax-h3.service 示例模板(必须先用「迁移前核查清单」采集真实启动命令后填充)
+# 安装:sudo cp /etc/systemd/system/minimax-h3.service 并 systemctl daemon-reload
+# ⚠️ 禁止按历史记忆填写 ExecStart:以下路径/参数均为占位,需在服务器核实。
+[Unit]
+Description=MiniMax H3 video model service (vLLM)
+After=network.target
+
+[Service]
+Type=exec
+# TODO(服务器核实):实际运行用户
+User=gpuuser
+# TODO(服务器核实):固定工作目录(模型/工程根目录)
+WorkingDirectory=/home/gpuuser/MiniMax-H3
+# TODO(服务器核实):固定 venv Python 绝对路径 + 已验证成功的 vLLM 启动参数全文
+# ExecStart=<venv>/bin/python -m vllm.entrypoints.openai.api_server \
+#     --model /path/to/MiniMax-H3 --served-model-name minimax-h3 \
+#     --port 8001 --tensor-parallel-size 4 ...原样迁移,不重新设计推理参数
+# TODO(服务器核实):必要环境变量改用 EnvironmentFile,不在 unit 里散写
+EnvironmentFile=-/etc/poem-video-agent/minimax-h3.env
+# GPU 分配按真实部署固定
+# Environment=CUDA_VISIBLE_DEVICES=0,1,2,3
+# 正常 SIGTERM 停止;H3 模型卸载需要时间,按实测调整
+TimeoutStartSec=600
+TimeoutStopSec=180
+# Restart 策略按真实运行情况决定:模型进程崩溃是否自动拉起
+Restart=on-failure
+RestartSec=10
+# 标准输出/错误进入 journald(默认),便于 journalctl -u minimax-h3 查看
+
+[Install]
+# 是否开机自启由用户决定;若服务器平时跑 Ollama 等其他任务,建议不 enable,
+# 通过 PoemVideo Studio「准备视频生成环境」按需启动。
+# WantedBy=multi-user.target

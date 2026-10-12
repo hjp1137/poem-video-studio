@@ -1,0 +1,17 @@
+node_modules
+frontend/node_modules
+frontend/dist
+frontend/test-results
+frontend/playwright-report
+backend/.venv
+backend/.e2e-data
+data
+.git
+.env
+__pycache__
+*.pyc
+plans
+Walkthroughes
+docs
+tasks
+开发日记.md

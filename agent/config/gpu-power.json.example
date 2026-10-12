@@ -1,0 +1,5 @@
+{
+  "enabled": true,
+  "default_power_limit": 280,
+  "per_gpu": {}
+}

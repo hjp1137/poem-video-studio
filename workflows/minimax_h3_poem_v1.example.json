@@ -1,0 +1,58 @@
+{
+  "12": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example_cover.png",
+      "upload": "image"
+    },
+    "_meta": {"title": "首帧图片"}
+  },
+  "35": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "prompt": "示例正向提示词",
+      "clip": ["30", 0]
+    },
+    "_meta": {"title": "正向 Prompt"}
+  },
+  "36": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "negative_prompt": "示例反向提示词",
+      "clip": ["30", 0]
+    },
+    "_meta": {"title": "Negative Prompt"}
+  },
+  "41": {
+    "class_type": "Text",
+    "inputs": {
+      "text": "示例语音文本",
+      "voice": "chinese_male"
+    },
+    "_meta": {"title": "语音/口播文本"}
+  },
+  "45": {
+    "class_type": "MiniMaxH3VideoGen",
+    "inputs": {
+      "width": 768,
+      "height": 1024,
+      "fps": 24,
+      "num_frames": 121,
+      "seed": 0,
+      "model": ["40", 0],
+      "image": ["12", 0],
+      "prompt": ["35", 0],
+      "negative_prompt": ["36", 0],
+      "speech": ["41", 0]
+    },
+    "_meta": {"title": "H3 视频生成"}
+  },
+  "50": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "filename_prefix": "example/prefix",
+      "video": ["45", 0]
+    },
+    "_meta": {"title": "保存视频"}
+  }
+}
