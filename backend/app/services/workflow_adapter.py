@@ -15,7 +15,7 @@ import yaml
 
 REQUIRED_FIELDS = ("image", "prompt", "save")
 # speech 为可选:部分工作流(如用户自建首帧图生视频)无语音输入节点
-OPTIONAL_FIELDS = ("negative_prompt", "speech", "width", "height", "fps", "num_frames", "seed")
+OPTIONAL_FIELDS = ("last_image", "negative_prompt", "speech", "width", "height", "fps", "num_frames", "seed")
 
 
 def load_workflow_map(path: Path) -> dict[str, dict[str, str]]:
@@ -91,10 +91,15 @@ class WorkflowAdapter:
         num_frames: int,
         filename_prefix: str,
         randomize_seed: bool = True,
+        last_image_name: str | None = None,
     ) -> dict[str, Any]:
         """深拷贝模板并注入全部动态字段,返回可直接 POST /prompt 的 JSON。"""
         workflow = copy.deepcopy(self.template)
         self._set(workflow, "image", image_name)
+        if last_image_name is not None:
+            if "last_image" not in self.mapping:
+                raise ValueError("当前工作流不支持尾帧：请使用带 first_frame/last_frame 的模板并映射 last_image")
+            self._set(workflow, "last_image", last_image_name)
         self._set(workflow, "prompt", prompt)
         self._set(workflow, "save", filename_prefix)
         # 可选字段(工作流不含对应节点时跳过,不注入)
