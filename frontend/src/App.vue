@@ -9,6 +9,7 @@
         <router-link to="/" class="nav-link">新建批量任务</router-link>
         <router-link to="/batches" class="nav-link">批次列表</router-link>
         <router-link to="/workflows" class="nav-link">模板管理</router-link>
+        <router-link to="/keyframes" class="nav-link">首尾帧测试</router-link>
         <span class="nav-sep">|</span>
         <router-link to="/server" class="nav-link">服务器总览</router-link>
         <router-link to="/server/gpu" class="nav-link">GPU</router-link>

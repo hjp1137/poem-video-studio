@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     # 数据根目录:默认开发环境使用仓库内 ./data,生产通过 .env 指向 /data/poem-video-studio
     data_root: Path = REPO_ROOT / "data" / "poem-video-studio"
 
+    # H3 原生视频 API（与 ComfyUI 8188 独立，不修改现有 H3 模型服务）
+    h3_api_base_url: str = "http://host.docker.internal:8000"
+    h3_turbo_lora_path: str = ("/data/AI_Models/MiniMax-H3/Turbo/"
+                              "minimax_h3_fl2v_turbo_8step_v1.0_768p_bf16.safetensors")
+
     # ComfyUI
     comfyui_base_url: str = "http://127.0.0.1:8188"
     comfyui_ws_url: str = "ws://127.0.0.1:8188/ws"
