@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import batches, server, system, tasks, uploads, workflows, ws
+from app.api import batches, keyframes, server, system, tasks, uploads, workflows, ws
 from app.core.config import settings
 from app.core.database import init_db
 
@@ -66,6 +66,7 @@ app.include_router(tasks.router)
 app.include_router(workflows.router)
 app.include_router(ws.router)
 app.include_router(server.router)
+app.include_router(keyframes.router)
 
 
 @app.get("/")
