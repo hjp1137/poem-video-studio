@@ -203,3 +203,13 @@ Web API 不直接执行宿主机命令,一律经宿主机 `poem-video-agent`(白
 部署与回滚:`agent/README.md`;H3/ComfyUI systemd 服务化迁移:`docs/2026-09-22_服务器控制中心_H3与ComfyUI服务化迁移手册.md`(真实服务器执行)。
 
 前端新增菜单:服务器(总览 / GPU / 模型服务 / 操作日志);批量页面顶部显示视频环境状态条(只读,不自动改变服务器状态)。
+
+## MiniMax H3 首尾帧测试（独立功能）
+
+开发分支新增 /keyframes 页面，支持上传首帧＋尾帧、文字提示词、5 秒竖屏，以及原版 50 步 / FL2VA Turbo 8-step 生成。通过 Studio FastAPI 直接请求 H3 的 /v1/videos/sync，不修改已有 ComfyUI 模板和批量队列。
+
+生产部署请在 .env 配置 H3_API_BASE_URL=http://host.docker.internal:8000（Studio API 容器访问宿主 H3），并保证 API_PORT 不与 H3 的宿主 8000 端口冲突。Turbo 模式要求 H3 服务已预加载相应 FL2VA LoRA。首次先用原版模式测试接口兼容性。
+
+后端离线测试：进入 backend 执行 python -m pytest tests/test_h3_keyframes.py -q。前端类型检查：进入 frontend 执行 pnpm run typecheck。
+
+注意：当前页面用于单次真实兼容性试验，尚未接入整首诗批量任务的新增首尾帧字段。详见 docs/2026-10-12_首尾帧生成接入与试运行.md。
