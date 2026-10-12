@@ -12,6 +12,7 @@ import ServerGpuView from '@/views/ServerGpuView.vue'
 import ServerServicesView from '@/views/ServerServicesView.vue'
 import ServerOperationsView from '@/views/ServerOperationsView.vue'
 import WorkflowTemplatesView from '@/views/WorkflowTemplatesView.vue'
+import KeyframeTestView from '@/views/KeyframeTestView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,6 +21,7 @@ const router = createRouter({
     { path: '/batches', name: 'batches', component: BatchListView },
     { path: '/batches/:id', name: 'batch-detail', component: BatchDetailView },
     { path: '/workflows', name: 'workflow-templates', component: WorkflowTemplatesView },
+    { path: '/keyframes', name: 'keyframes', component: KeyframeTestView },
     { path: '/server', name: 'server-overview', component: ServerOverviewView },
     { path: '/server/gpu', name: 'server-gpu', component: ServerGpuView },
     { path: '/server/services', name: 'server-services', component: ServerServicesView },
